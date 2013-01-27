@@ -63,6 +63,44 @@ public class ClientDBManager {
 
 	}
 
-	
+	public List<Client> getAllClients() throws java.sql.SQLException,
+			SQLException {
+		List<Client> Clients = new ArrayList<Client>();
+		ResultSet rs = getClientStmt.executeQuery();
+		while (rs.next()) {
+			Clients.add(new Client(rs.getString("name")));
+		}
+		return Clients;
+	}
+	public void clear() throws java.sql.SQLException {
+		ResultSet rs = getClientStmt.executeQuery();
+		while (rs.next())
+			deleteClientStmt.executeUpdate();
+	}
+	public List<Integer> FindClientByName(String name)
+			throws java.sql.SQLException {
+		try {
+			List<Integer> result = new ArrayList<Integer>();
+			findClientStmt.setString(1, name);
+			ResultSet rs = findClientStmt.executeQuery();
+			while (rs.next())
+				result.add(rs.getInt("ID"));
+			return result;
+		} catch (java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public void deleteAllClients() 
+	{
+		try 
+		{
+			deleteClientStmt.executeUpdate();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+	}
 	
 }

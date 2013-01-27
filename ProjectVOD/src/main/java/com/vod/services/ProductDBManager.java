@@ -75,7 +75,62 @@ public class ProductDBManager {
 		dropProductStmt.executeUpdate();
 	}
 
-	
+	public List<Integer> findProductByName(ProductMarks mark)
+			throws java.sql.SQLException {
+		try {
+			List<Integer> result = new ArrayList<Integer>();
+			findProductByNameStmt.setString(1, mark.toString());
+			ResultSet rs = findProductByNameStmt.executeQuery();
+			while (rs.next())
+				result.add(rs.getInt("ID"));
+			return result;
+		} catch (java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public List<Integer> findProductByCode(float code)
+			throws java.sql.SQLException {
+		try {
+			List<Integer> result = new ArrayList<Integer>();
+			findProductByCodeStmt.setFloat(1, code);
+			ResultSet rs = findProductByCodeStmt.executeQuery();
+			while (rs.next())
+				result.add(rs.getInt("ID"));
+			return result;
+		} catch (java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public List<Product> getAllProducts() throws java.sql.SQLException {
+		List<Product> products = new ArrayList<Product>();
+		try {
+			ResultSet rs = getProductStmt.executeQuery();
+			while (rs.next()) {
+
+				products.add(new Product(rs.getString("name"), rs
+						.getDouble("price"), rs.getFloat("code")));
+			}
+
+		} catch (java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+		return products;
+	}
+
+	public void printProductWithCondition(List<Product> listProducts,
+			com.vod.services.Condition condition) {
+		for (Product p : listProducts) {
+			if (condition.getCondition(p)) {
+				System.out.println("Nazwa: " + p.getName2() + "\tKod: "
+						+ p.getCode() + "\tCena: " + p.getPrice());
+			}
+		}
+	}
+
 	public void deleteAllProducts()
 	{
 		try 

@@ -64,7 +64,41 @@ public class ClientProductDBManager {
 		}
 	}
 
-	
+	public void deleteAllClientProduct(List<Integer> listClientId) throws java.sql.SQLException {
+		try {
+			for (Integer clientID : listClientId) {
+				deleteAllClientProductStmt.setInt(1, clientID);
+				deleteAllClientProductStmt.executeUpdate();
+			}
+		} catch (java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteAllProductFromClient() throws java.sql.SQLException {
+		try {
+			deleteAllProductFromClientStmt.executeUpdate();
+		} catch (java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public List<Product> getClientProduct(List<Integer> listClientId) throws java.sql.SQLException {
+		List<Product> Products = new ArrayList<Product>();
+		try {
+			for (Integer clientID : listClientId) {
+				getProductClientStmt.setInt(1, clientID);
+				ResultSet rs = getProductClientStmt.executeQuery();
+				while (rs.next()) {
+					Products.add(new Product(rs.getString("name"), 
+							rs.getDouble("price"),rs.getFloat("code")));
+				}
+			}
+		} catch (java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+		return Products;
+	}
 
 }
-
